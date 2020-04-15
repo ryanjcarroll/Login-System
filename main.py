@@ -66,7 +66,6 @@ class Window(Tk):
     def register(self):
         r = RegisterWindow()
         r.run()
-        print("registering")
 
     # called to build the window and control the main loop
     def run(self):
@@ -117,6 +116,7 @@ class RegisterWindow(Tk):
         p_input = self.password.get()
         p2_input = self.password2.get()
 
+        # check if username already exists
         nameTaken = False
         with open("database.json", "r") as file:
             data = json.loads(file.read())
