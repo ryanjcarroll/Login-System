@@ -2,7 +2,7 @@ from tkinter import *
 import json
 
 # UI class
-class Window(Tk):
+class LoginWindow(Tk):
     def __init__(self):
         Tk.__init__(self)
         self.geometry("240x200")
@@ -58,14 +58,14 @@ class Window(Tk):
         # display message result
         self.login_result.destroy()
         if(valid_login):
-            self.login_result = Label(self, text="Login success", fg="green")
+            a = ApplicationWindow()
+            self.destroy()
         else:
             self.login_result = Label(self, text="Login invalid", fg="red")
-        self.login_result.grid(row=5, column=1, sticky=W)
+            self.login_result.grid(row=5, column=1, sticky=W)
 
     def register(self):
         r = RegisterWindow()
-        r.run()
 
     # called to build the window and control the main loop
     def run(self):
@@ -81,6 +81,8 @@ class RegisterWindow(Tk):
         self.output = Label(self)
         self.register_result = Label(self)
         self.title("Register new user")
+
+        self.run()
 
     def build(self):
         # title
@@ -150,5 +152,18 @@ class RegisterWindow(Tk):
         self.build()
         self.pack()
 
-win = Window()
+class ApplicationWindow(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        self.geometry("270x200")
+        self.resizable(False, False)
+        self.output = Label(self)
+        self.register_result = Label(self)
+        self.title("Main Application")
+
+        self.run()
+    def run(self):
+        pass
+    
+win = LoginWindow()
 win.run()
