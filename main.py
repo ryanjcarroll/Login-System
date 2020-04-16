@@ -17,6 +17,7 @@ class App(Tk):
 
         self.show_frame(LoginWindow)
         self.geometry("300x200")
+        self.resizable(False, False)
 
     def show_frame(self, type):
         frame = self.frames[type]
@@ -243,7 +244,7 @@ class ApplicationWindow(Frame):
         self.user = user
         self.username.destroy()
         self.username = Label(self, text="Welcome, " + self.user + "!")
-        self.username.grid(row=1, column=0)
+        self.username.grid(row=1, column=0, pady =(0, 20))
 
     def pack(self):
         self.title.grid(row=0,column=0, padx = 50)
