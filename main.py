@@ -1,15 +1,37 @@
 from tkinter import *
 import json
 
-# UI class
-class LoginWindow(Tk):
+class App(Tk):
     def __init__(self):
         Tk.__init__(self)
-        self.geometry("240x200")
-        self.resizable(False, False)
+        container = Frame(self)
+
+        self.frames = {}
+        for F in (LoginWindow, RegisterWindow, ApplicationWindow):
+            frame = F(self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame(LoginWindow)
+
+    def show_frame(self, type):
+        frame = self.frames[type]
+        frame.tkraise()
+
+# UI class
+class LoginWindow(Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
+
+        self.master = master
+        self.master.geometry("470x200")
+        self.master.resizable(False, False)
+        self.master.title("Login Pager")
+
         self.output = Label(self)
         self.login_result = Label(self)
-        self.title("Password Generator")
+
+        self.run()
 
     # builds all widgets and adds them to the window
     def build(self):
@@ -29,6 +51,10 @@ class LoginWindow(Tk):
 
         # register button
         self.register = Button(self, text="Register", command=self.register)
+
+    def clear(self):
+        self.username.delete(0,'end')
+        self.password.delete(0,'end')
 
     def pack(self):
         self.title.grid(row=0, column=0, pady=(20, 10), columnspan=3)
@@ -58,29 +84,31 @@ class LoginWindow(Tk):
         # display message result
         self.login_result.destroy()
         if(valid_login):
-            a = ApplicationWindow()
-            self.destroy()
+            self.clear()
+            self.master.show_frame(ApplicationWindow)
         else:
             self.login_result = Label(self, text="Login invalid", fg="red")
             self.login_result.grid(row=5, column=1, sticky=W)
 
     def register(self):
-        r = RegisterWindow()
+        self.master.show_frame(RegisterWindow)
 
     # called to build the window and control the main loop
     def run(self):
         self.build()
         self.pack()
-        self.mainloop()
 
-class RegisterWindow(Tk):
-    def __init__(self):
-        Tk.__init__(self)
-        self.geometry("270x200")
-        self.resizable(False, False)
+class RegisterWindow(Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
+
+        self.master = master
+        self.master.geometry("270x200")
+        self.master.resizable(False, False)
+        self.master.title("Register new user")
+
         self.output = Label(self)
         self.register_result = Label(self)
-        self.title("Register new user")
 
         self.run()
 
@@ -100,8 +128,20 @@ class RegisterWindow(Tk):
         self.password2_label = Label(self, text="Retype password")
         self.password2 = Entry(self, show="\u2022")
 
+        # back button
+        self.back = Button(self, text="Back", command=self.back)
+
         # register button
         self.register = Button(self, text="Register", command=self.register)
+
+    def back(self):
+        self.clear()
+        self.master.show_frame(LoginWindow)
+
+    def clear(self):
+        self.username.delete(0,'end')
+        self.password.delete(0,'end')
+        self.password2.delete(0, 'end')
 
     def pack(self):
         self.title.grid(row=0, column=0, pady=(20, 10), columnspan=3)
@@ -111,6 +151,7 @@ class RegisterWindow(Tk):
         self.password.grid(row=2, column=1)
         self.password2_label.grid(row=3, column=0, padx=(20, 0))
         self.password2.grid(row=3, column=1)
+        self.back.grid(row=4, column=1, sticky = W)
         self.register.grid(row=4, column=1, sticky=E)
 
     def register(self):
@@ -139,6 +180,7 @@ class RegisterWindow(Tk):
             self.register_result = Label(self, text="Password must be 6+ characters", fg="red")
         else:
             self.register_result = Label(self, text="Registered successfully", fg="green")
+            self.clear()
             new_user = {'username': u_input, 'password': p_input}
             with open('database.json') as file:
                 data = json.load(file)
@@ -152,18 +194,31 @@ class RegisterWindow(Tk):
         self.build()
         self.pack()
 
-class ApplicationWindow(Tk):
-    def __init__(self):
-        Tk.__init__(self)
-        self.geometry("270x200")
-        self.resizable(False, False)
+class ApplicationWindow(Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
+
+        self.master = master
+        self.master.geometry("270x200")
+        self.master.resizable(False, False)
+        self.master.title("Main Application")
         self.output = Label(self)
         self.register_result = Label(self)
-        self.title("Main Application")
 
         self.run()
+
+    def logout(self):
+        self.master.show_frame(LoginWindow)
+
+    def build(self):
+        self.logout = Button(self, text="Logout", command=self.logout)
+
+    def pack(self):
+        self.logout.pack()
+
     def run(self):
-        pass
-    
-win = LoginWindow()
-win.run()
+        self.build()
+        self.pack()
+
+m=App()
+m.mainloop()
