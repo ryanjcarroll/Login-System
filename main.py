@@ -195,7 +195,7 @@ class RegisterWindow(Frame):
                 data = json.load(file)
                 data["login_info"].append(new_user)
             with open('database.json', 'w') as file:
-                json.dump(data, file)
+                json.dump(data, file, indent=2)
 
         self.register_result.grid(row=5, column=0, columnspan=2)
 
@@ -319,7 +319,7 @@ class ChangePasswordWindow(Frame):
                     if self.user == profile['username']:
                         profile['password'] = p_input
             with open('database.json', 'w') as file:
-                json.dump(data, file)
+                json.dump(data, file, indent=2)
 
         self.result.grid(row=5, column=0, columnspan=2, sticky=E)
 
