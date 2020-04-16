@@ -36,10 +36,6 @@ class LoginWindow(Frame):
 
         self.run()
 
-    # called whenever this frame is set as the active frame
-    def set_active(self):
-        self.master.title("Login Page")
-
     # builds all widgets and adds them to the window
     def build(self):
         # title
@@ -59,18 +55,13 @@ class LoginWindow(Frame):
         # register button
         self.register = Button(self, text="Register", command=self.register)
 
+    # called whenever this frame is set as the active frame
+    def set_active(self):
+        self.master.title("Login Page")
+
     def clear(self):
         self.username.delete(0,'end')
         self.password.delete(0,'end')
-
-    def pack(self):
-        self.title.grid(row=0, column=0, pady=(20, 10), columnspan=3)
-        self.username_label.grid(row=1, column=0, padx=(20, 0), pady=(0, 5))
-        self.username.grid(row=1, column=1, pady=(0, 5))
-        self.password_label.grid(row=2, column=0, padx=(20, 0))
-        self.password.grid(row=2, column=1)
-        self.login.grid(row=3, column=1, sticky=E)
-        self.register.grid(row=4, column=1, sticky=E)
 
     # called when the login button is pressed
     def login(self):
@@ -101,6 +92,15 @@ class LoginWindow(Frame):
     def register(self):
         self.master.show_frame(RegisterWindow)
 
+    def pack(self):
+        self.title.grid(row=0, column=0, pady=(20, 10), columnspan=3)
+        self.username_label.grid(row=1, column=0, padx=(20, 0), pady=(0, 5))
+        self.username.grid(row=1, column=1, pady=(0, 5))
+        self.password_label.grid(row=2, column=0, padx=(20, 0))
+        self.password.grid(row=2, column=1)
+        self.login.grid(row=3, column=1, sticky=E)
+        self.register.grid(row=4, column=1, sticky=E)
+
     # called to build the window and control the main loop
     def run(self):
         self.build()
@@ -116,10 +116,6 @@ class RegisterWindow(Frame):
         self.register_result = Label(self)
 
         self.run()
-
-    # called whenever this frame is set as the active frame
-    def set_active(self):
-        self.master.title("Register new user")
 
     def build(self):
         # title
@@ -143,6 +139,10 @@ class RegisterWindow(Frame):
         # register button
         self.register = Button(self, text="Register", command=self.register)
 
+    # called whenever this frame is set as the active frame
+    def set_active(self):
+        self.master.title("Register new user")
+
     def back(self):
         self.clear()
         self.master.show_frame(LoginWindow)
@@ -151,17 +151,6 @@ class RegisterWindow(Frame):
         self.username.delete(0,'end')
         self.password.delete(0,'end')
         self.password2.delete(0, 'end')
-
-    def pack(self):
-        self.title.grid(row=0, column=0, pady=(20, 10), columnspan=3)
-        self.username_label.grid(row=1, column=0, padx=(20, 0), pady=(0, 5))
-        self.username.grid(row=1, column=1, pady=(0, 5))
-        self.password_label.grid(row=2, column=0, padx=(20, 0))
-        self.password.grid(row=2, column=1)
-        self.password2_label.grid(row=3, column=0, padx=(20, 0))
-        self.password2.grid(row=3, column=1)
-        self.back.grid(row=4, column=1, sticky = W)
-        self.register.grid(row=4, column=1, sticky=E)
 
     def register(self):
         u_input = self.username.get()
@@ -199,6 +188,17 @@ class RegisterWindow(Frame):
 
         self.register_result.grid(row=5, column=0, columnspan=2)
 
+    def pack(self):
+        self.title.grid(row=0, column=0, pady=(20, 10), columnspan=3)
+        self.username_label.grid(row=1, column=0, padx=(20, 0), pady=(0, 5))
+        self.username.grid(row=1, column=1, pady=(0, 5))
+        self.password_label.grid(row=2, column=0, padx=(20, 0))
+        self.password.grid(row=2, column=1)
+        self.password2_label.grid(row=3, column=0, padx=(20, 0))
+        self.password2.grid(row=3, column=1)
+        self.back.grid(row=4, column=1, sticky=W)
+        self.register.grid(row=4, column=1, sticky=E)
+
     def run(self):
         self.build()
         self.pack()
@@ -216,6 +216,19 @@ class ApplicationWindow(Frame):
         self.username = Label(self)
         self.run()
 
+    def build(self):
+        # title
+        self.title = Message(self, text="Main Application", width=400, font=TITLE_FONT, justify=CENTER)
+
+        # buttons
+        self.logout = Button(self, text="Logout", command=self.logout)
+        self.change_password = Button(self, text="Change Password", command=self.change_password)
+
+        # called whenever this frame is set as the active frame
+
+    def set_active(self):
+        self.master.title("Main Application")
+
     # called when user clicks Logout button
     def logout(self):
         self.master.show_frame(LoginWindow)
@@ -231,18 +244,6 @@ class ApplicationWindow(Frame):
         self.username.destroy()
         self.username = Label(self, text="Welcome, " + self.user + "!")
         self.username.grid(row=1, column=0)
-
-    # called whenever this frame is set as the active frame
-    def set_active(self):
-        self.master.title("Main Application")
-
-    def build(self):
-        # title
-        self.title = Message(self, text="Main Application", width=400, font=TITLE_FONT, justify=CENTER)
-
-        # buttons
-        self.logout = Button(self, text="Logout", command=self.logout)
-        self.change_password = Button(self, text="Change Password", command=self.change_password)
 
     def pack(self):
         self.title.grid(row=0,column=0, padx = 50)
@@ -261,12 +262,6 @@ class ChangePasswordWindow(Frame):
         self.user = None
         self.result = Label(self)
         self.run()
-
-    def set_active(self):
-        self.master.title("Change Password")
-
-    def set_user(self, user):
-        self.user = user
 
     def build(self):
         # title
@@ -290,6 +285,12 @@ class ChangePasswordWindow(Frame):
         # update button
         self.update = Button(self, text="Update", command=self.update)
 
+    def set_active(self):
+        self.master.title("Change Password")
+
+    def set_user(self, user):
+        self.user = user
+
     def update(self):
         old_input = self.confirm.get()
         p_input = self.password.get()
@@ -303,6 +304,7 @@ class ChangePasswordWindow(Frame):
                 if old_input == profile['password']:
                     valid_old_pass = True
 
+        # display result message and update the JSON if valid
         self.result.destroy()
         if not valid_old_pass:
             self.result = Label(self, text="Old password incorrect", fg="red")
@@ -322,7 +324,6 @@ class ChangePasswordWindow(Frame):
                 json.dump(data, file, indent=2)
 
         self.result.grid(row=5, column=0, columnspan=2, sticky=E)
-
 
     def back(self):
         self.clear()
